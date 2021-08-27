@@ -6,6 +6,27 @@ export default function UserList( props) {
     const fnameRef = useRef();
     const lnameRef = useRef();
     const gradeRef = useRef();
+
+    const sendGetStudent = (sid) => {
+
+        console.log('sendGetStudent id=' + sid)
+        fetch(`http://localhost:5000/students/${sid}`, {
+          method: 'GET',
+        }).then(res => res.json())
+          .then(data => {           
+              //outAreaSetter( JSON.stringify(data.data ));
+         
+          let student = data.data
+          console.log('sendGetStudent: student=' +JSON.stringify(student))
+          sidRef.current.value = student.id;
+          fnameRef.current.value = student.fname;
+          lnameRef.current.value = student.lname;
+          gradeRef.current.value = student.grade;
+      })
+          .catch(err => console.error("Error:", err));
+      }
+
+
     const sendPost = () => {
         console.log('sendPost called')
         var sid = sidRef.current.value;
@@ -61,16 +82,6 @@ export default function UserList( props) {
            })
            .catch(err => console.error("Error:", err));  
     }
-    const setForm = (sid) => {
-        var student = props.students.find( student => student.id === sid)
-        console.log(JSON.stringify(student))
-        sidRef.current.value = sid;
-        fnameRef.current.value = student.fname;
-        lnameRef.current.value = student.lname;
-        gradeRef.current.value = student.grade;
-  
-      }
-  
 
     return (
         <div>
@@ -82,14 +93,14 @@ export default function UserList( props) {
              <tbody> 
             {
             props.students.map( (student, index) => {
+                console.log('map: student=' +JSON.stringify(student))
                 return (
                 <tr key={index}>
                     <td>{student.id}</td>
                     <td>{student.fname}</td>
                     <td>{student.lname}</td>
                     <td>{student.grade}</td>
-                    <td><button onClick ={()=> {setForm(student.id)}} >Update</button><button onClick={() => {sendDelete(student.id)}}>Delete</button></td>
-
+                    <td><button onClick ={()=> {sendGetStudent(student.id)}} >Query</button><button onClick={() => {sendDelete(student.id)}}>Delete</button></td>
                 </tr>
                 )
             })

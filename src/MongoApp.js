@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import UserList from './UserList';
 
+
 export default function MongoApp() {
     const [outArea, outAreaSetter] = useState("");
     const [students, studentsSetter] = useState([])  //const students =[]
@@ -20,6 +21,9 @@ export default function MongoApp() {
     })
         .catch(err => console.error("Error:", err));
     }
+
+   
+
     useEffect( ()=> {
         students.forEach( (student) =>{
           console.log( JSON.stringify( student))
@@ -32,7 +36,6 @@ export default function MongoApp() {
       <div>
         <h3>Mongo/Express Client</h3>
         <div><button onClick={sendGet}>Query All Students</button></div>
-        <div><button >Query Student</button></div>
         
         <div>{outArea}</div>
         <UserList students={students}/>
